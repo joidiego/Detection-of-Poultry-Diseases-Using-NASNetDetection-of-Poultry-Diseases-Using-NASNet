@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informasi Penyakit Ayam | Ternak Manuk</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index-style.css') }}">
+    
+    <style>
+        .disease-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 80px 0 60px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .disease-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='images/pattern.png') }}");
+            opacity: 0.1;
+        }
+        
+        .disease-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: var(--transition);
+            background-color: white;
+        }
+        
+        .disease-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .disease-card-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .disease-card-body {
+            padding: 20px;
+        }
+        
+        .symptoms-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .symptoms-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+        }
+        
+        .symptoms-list li::before {
+            content: '\f0a1';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .treatment-section {
+            background-color: var(--primary-light);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .treatment-section h6 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .treatment-section h6::before {
+            content: '\f0fa';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            margin-right: 10px;
+        }
+        
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-back:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-back i {
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .disease-header {
+                padding: 60px 0 40px;
+            }
+            
+            .btn-back {
+                padding: 6px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Back Button -->
+    <a href="{{ url_for('index') }}" class="btn btn-back">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
+
+    <!-- Disease Header -->
+    <section class="disease-header">
+        <div class="container text-center">
+            <h1 class="display-4 mb-3">Informasi Penyakit Ayam</h1>
+            <p class="lead">Kenali gejala, penyebab, dan pengobatan berbagai penyakit ayam</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                {% for penyakit in penyakit_list %}
+                <div class="disease-card">
+                    <div class="disease-card-header">
+                        <span>{{ penyakit.nama }}</span>
+                        <span class="badge bg-white text-primary">{{ loop.index }}</span>
+                    </div>
+                    <div class="disease-card-body">
+                        <p class="text-muted mb-4">{{ penyakit.deskripsi }}</p>
+                        
+                        <h6 class="mb-3">Gejala:</h6>
+                        <ul class="symptoms-list">
+                            {% for gejala in penyakit.gejala %}
+                            <li>{{ gejala }}</li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <div class="treatment-section">
+                            <h6>Pengobatan:</h6>
+                            <p>{{ penyakit.pengobatan }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2023 Ternak Manuk. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
